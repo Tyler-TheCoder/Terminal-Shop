@@ -8,10 +8,14 @@
   width: min(620px, 92vw);
   max-height: 85dvh;
   padding: 0;
+  margin: auto; /* Fix centering overridden by global reset */
   overflow: hidden;
+  box-shadow: var(--glow-lg);
+}
+
+.checkout-dialog[open] {
   display: flex;
   flex-direction: column;
-  box-shadow: var(--glow-lg);
 }
 
 .checkout-dialog::backdrop {

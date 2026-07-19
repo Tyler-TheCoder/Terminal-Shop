@@ -7,7 +7,7 @@ function Header({ cartItemCount, onCartToggle }) {
         <h1 className="header-logo">
           <span className="header-logo-prompt">&gt;</span>
           {' TERMINAL'}
-          <span className="header-logo-sep">_</span>
+          <span className="header-logo-sep"> </span>
           {'SHOP'}
           <span className="cursor-blink">_</span>
         </h1>

@@ -4,6 +4,8 @@ import CategoryFilter from './components/CategoryFilter';
 import ProductGrid from './components/ProductGrid';
 import CartSidebar from './components/CartSidebar';
 import CheckoutTerminal from './components/CheckoutTerminal';
+import Footer from './components/Footer';
+import ProductModal from './components/ProductModal';
 
 function App() {
   const [products, setProducts] = useState([]);
@@ -14,6 +16,7 @@ function App() {
   const [cart, setCart] = useState([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null);
 
   // Fetch data
   useEffect(() => {
@@ -103,7 +106,7 @@ function App() {
         onCartToggle={() => setIsCartOpen(!isCartOpen)} 
       />
       
-      <main style={{ padding: '0 1.5rem', maxWidth: '1400px', margin: '0 auto', width: '100%' }}>
+      <main style={{ flex: 1, padding: '0 1.5rem', maxWidth: '1400px', margin: '0 auto', width: '100%' }}>
         <CategoryFilter 
           activeCategory={activeCategory} 
           onCategoryChange={setActiveCategory} 
@@ -113,9 +116,12 @@ function App() {
           products={filteredProducts} 
           loading={loading} 
           error={error} 
-          onAddToCart={handleAddToCart} 
+          onAddToCart={handleAddToCart}
+          onProductClick={setSelectedProduct}
         />
       </main>
+
+      <Footer />
 
       <CartSidebar 
         cart={cart}
@@ -131,6 +137,15 @@ function App() {
         isOpen={isCheckoutOpen}
         onClose={() => setIsCheckoutOpen(false)}
         onNewOrder={handleNewOrder}
+      />
+
+      <ProductModal
+        product={selectedProduct}
+        onClose={() => setSelectedProduct(null)}
+        onAddToCart={(product) => {
+          handleAddToCart(product);
+          setSelectedProduct(null); // Optional: close modal when adding to cart
+        }}
       />
     </>
   );

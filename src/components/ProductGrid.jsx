@@ -1,7 +1,7 @@
 import ProductCard from './ProductCard';
 import './ProductGrid.css';
 
-function ProductGrid({ products, loading, error, onAddToCart }) {
+function ProductGrid({ products, loading, error, onAddToCart, onProductClick }) {
   if (loading) {
     return (
       <div className="terminal-status">
@@ -45,6 +45,7 @@ function ProductGrid({ products, loading, error, onAddToCart }) {
           key={product.id}
           product={product}
           onAddToCart={onAddToCart}
+          onClick={() => onProductClick(product)}
         />
       ))}
     </div>

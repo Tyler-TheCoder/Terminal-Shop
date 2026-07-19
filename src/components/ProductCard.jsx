@@ -1,8 +1,20 @@
 import './ProductCard.css';
 
-function ProductCard({ product, onAddToCart }) {
+function ProductCard({ product, onAddToCart, onClick }) {
   return (
-    <article className="product-card" id={`product-${product.id}`}>
+    <article 
+      className="product-card" 
+      id={`product-${product.id}`}
+      onClick={onClick}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          onClick();
+        }
+      }}
+    >
       <div className="product-card-img-wrap">
         <img
           className="product-card-img"
@@ -22,7 +34,10 @@ function ProductCard({ product, onAddToCart }) {
           </span>
           <button
             className="term-btn product-card-add"
-            onClick={() => onAddToCart(product)}
+            onClick={(e) => {
+              e.stopPropagation();
+              onAddToCart(product);
+            }}
             id={`add-to-cart-${product.id}`}
           >
             [ADD_TO_CART]
