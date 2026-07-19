@@ -1,0 +1,38 @@
+/* ═══ Product Grid ═══ */
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+  padding-bottom: 3rem;
+}
+
+/* --- Loading / Error / Empty states --- */
+.terminal-status {
+  padding: 3rem 0;
+  text-align: left;
+}
+
+.terminal-status-line {
+  font-size: 0.9rem;
+  color: var(--term-green);
+  margin-bottom: 0.25rem;
+  text-shadow: var(--glow-sm);
+}
+
+.terminal-status--error .terminal-status-line {
+  color: var(--term-red);
+  text-shadow: 0 0 6px rgba(255, 49, 49, 0.35);
+}
+
+.terminal-error-tag {
+  color: var(--term-red);
+  font-weight: 700;
+}
+
+@media (max-width: 640px) {
+  .product-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}

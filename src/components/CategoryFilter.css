@@ -1,0 +1,57 @@
+/* ═══ Category Filter ═══ */
+
+.category-filter {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.25rem 0;
+  flex-wrap: wrap;
+}
+
+.category-filter-prompt {
+  font-size: 0.85rem;
+  color: var(--term-green-dim);
+  letter-spacing: 0.04em;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.category-filter-options {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.category-filter-btn {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 700;
+  background: transparent;
+  color: var(--term-green-dim);
+  border: 1px solid var(--term-green-dark);
+  border-radius: 0;
+  padding: 0.4rem 1rem;
+  cursor: pointer;
+  letter-spacing: 0.06em;
+  transition: all 0.15s ease;
+}
+
+.category-filter-btn:hover {
+  color: var(--term-green);
+  border-color: var(--term-green);
+}
+
+.category-filter-btn.active {
+  background: var(--term-green);
+  color: var(--term-black);
+  border-color: var(--term-green);
+  box-shadow: var(--glow-sm);
+}
+
+@media (max-width: 480px) {
+  .category-filter {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+}
