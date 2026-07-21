@@ -63,6 +63,6 @@ src/
 
 ## Contact
 
-**Developer**: Akram Bounoua  
+**Developer**: Tyler TheCoder 
 **Email**: akram.bounoua.info@gmail.com  
 **Repository**: [Terminal-Shop](https://github.com/Tyler-TheCoder/Terminal-Shop.git)
