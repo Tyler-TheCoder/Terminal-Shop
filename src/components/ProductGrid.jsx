@@ -1,12 +1,12 @@
 import ProductCard from './ProductCard';
 import './ProductGrid.css';
 
-function ProductGrid({ products, loading, error, onAddToCart, onProductClick }) {
+function ProductGrid({ products, loading, error, onAddToCart, onProductClick, isSearching }) {
   if (loading) {
     return (
       <div className="terminal-status">
         <p className="terminal-status-line">
-          &gt; Fetching products from remote server...
+          &gt; {isSearching ? "QUERYING DATABASE..." : "Fetching products from remote server..."}
         </p>
         <p className="terminal-status-line">
           &gt; <span className="cursor-blink">_</span>
@@ -32,7 +32,7 @@ function ProductGrid({ products, loading, error, onAddToCart, onProductClick }) 
     return (
       <div className="terminal-status">
         <p className="terminal-status-line">
-          &gt; No products found in this category.
+          &gt; {isSearching ? "0 results found" : "No products found in this category."}
         </p>
       </div>
     );

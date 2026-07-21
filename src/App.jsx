@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import Header from './components/Header';
 import CategoryFilter from './components/CategoryFilter';
+import SearchBar from './components/SearchBar';
 import ProductGrid from './components/ProductGrid';
 import CartSidebar from './components/CartSidebar';
 import CheckoutTerminal from './components/CheckoutTerminal';
@@ -17,6 +18,11 @@ function App() {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
+
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
+  const [isSearching, setIsSearching] = useState(false);
+  const [searchError, setSearchError] = useState(null);
 
   // Fetch data
   useEffect(() => {
@@ -51,6 +57,35 @@ function App() {
 
     fetchProducts();
   }, []);
+
+  // Fetch search data
+  useEffect(() => {
+    if (!searchQuery) {
+      setSearchResults([]);
+      return;
+    }
+
+    const fetchSearchResults = async () => {
+      try {
+        setIsSearching(true);
+        setSearchError(null);
+        
+        const res = await fetch(`https://dummyjson.com/products/search?q=${encodeURIComponent(searchQuery)}`);
+        if (!res.ok) {
+          throw new Error('Search failed');
+        }
+        
+        const data = await res.json();
+        setSearchResults(data.products);
+      } catch (err) {
+        setSearchError(err.message);
+      } finally {
+        setIsSearching(false);
+      }
+    };
+
+    fetchSearchResults();
+  }, [searchQuery]);
 
   // Handlers
   const handleAddToCart = (product) => {
@@ -93,11 +128,20 @@ function App() {
   };
 
   // Derived state
+  const isSearchActive = searchQuery.length > 0;
+  const displayProducts = isSearchActive ? searchResults : products;
+  
   const filteredProducts = activeCategory === 'all' 
-    ? products 
-    : products.filter(p => p.category === activeCategory);
+    ? displayProducts 
+    : displayProducts.filter(p => {
+        const cat = p.category === 'mobile-accessories' ? 'accessories' : p.category;
+        return cat === activeCategory;
+      });
 
   const cartItemCount = cart.reduce((sum, item) => sum + item.qty, 0);
+
+  const currentLoading = isSearchActive ? isSearching : loading;
+  const currentError = isSearchActive ? searchError : error;
 
   return (
     <>
@@ -107,6 +151,8 @@ function App() {
       />
       
       <main style={{ flex: 1, padding: '0 1.5rem', maxWidth: '1400px', margin: '0 auto', width: '100%' }}>
+        <SearchBar onSearch={setSearchQuery} />
+
         <CategoryFilter 
           activeCategory={activeCategory} 
           onCategoryChange={setActiveCategory} 
@@ -114,10 +160,11 @@ function App() {
         
         <ProductGrid 
           products={filteredProducts} 
-          loading={loading} 
-          error={error} 
+          loading={currentLoading} 
+          error={currentError} 
           onAddToCart={handleAddToCart}
           onProductClick={setSelectedProduct}
+          isSearching={isSearchActive}
         />
       </main>
 
