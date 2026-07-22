@@ -25,24 +25,27 @@ function CheckoutTerminal({ cart, isOpen, onClose, onNewOrder }) {
     const currentCount = cart.reduce((sum, item) => sum + item.qty, 0);
 
     const receiptLines = [
-      { text: '> Initiating checkout sequence...', type: 'system' },
-      { text: '> Connecting to payment terminal...', type: 'system' },
-      { text: '> ════════════════════════════════════════', type: 'divider' },
-      { text: '>   TERMINAL SHOP — RECEIPT', type: 'heading' },
-      { text: '> ════════════════════════════════════════', type: 'divider' },
-      { text: '>', type: 'blank' },
+      { text: 'Initiating checkout sequence...', type: 'system' },
+      { text: 'Connecting to payment terminal...', type: 'system' },
+      { type: 'divider-double' },
+      { text: 'TERMINAL SHOP — RECEIPT', type: 'heading' },
+      { type: 'divider-double' },
+      { type: 'blank' },
       ...cart.map((item, i) => ({
-        text: `>  [${String(i + 1).padStart(2, '0')}] ${item.title.substring(0, 24).padEnd(24)} x${item.qty}  $${(item.price * item.qty).toFixed(2)}`,
         type: 'item',
+        index: String(i + 1).padStart(2, '0'),
+        title: item.title,
+        qty: item.qty,
+        price: (item.price * item.qty).toFixed(2),
       })),
-      { text: '>', type: 'blank' },
-      { text: '> ────────────────────────────────────────', type: 'divider' },
-      { text: `>  ITEMS:  ${currentCount}`, type: 'total' },
-      { text: `>  TOTAL:  $${currentTotal.toFixed(2)}`, type: 'grand-total' },
-      { text: '> ════════════════════════════════════════', type: 'divider' },
-      { text: '>', type: 'blank' },
-      { text: '> Payment processed successfully.', type: 'success' },
-      { text: '> Thank you for shopping at Terminal Shop.', type: 'success' },
+      { type: 'blank' },
+      { type: 'divider-single' },
+      { type: 'summary', label: 'ITEMS:', value: String(currentCount) },
+      { type: 'grand-total', label: 'TOTAL:', value: `$${currentTotal.toFixed(2)}` },
+      { type: 'divider-double' },
+      { type: 'blank' },
+      { text: 'Payment processed successfully.', type: 'success' },
+      { text: 'Thank you for shopping at Terminal Shop.', type: 'success' },
     ];
 
     setLines([]);
@@ -103,14 +106,43 @@ function CheckoutTerminal({ cart, isOpen, onClose, onNewOrder }) {
 
       {/* Terminal output body */}
       <div className="checkout-body" ref={bodyRef}>
-        {lines.map((line, i) => (
-          <p key={i} className={`checkout-line checkout-line--${line.type}`}>
-            {line.text}
-          </p>
-        ))}
+        {lines.map((line, i) => {
+          if (line.type === 'blank') {
+            return <div key={i} className="checkout-line checkout-line--blank" />;
+          }
+          if (line.type === 'divider-double' || line.type === 'divider-single') {
+            const styleType = line.type === 'divider-double' ? 'double' : 'single';
+            return <div key={i} className={`checkout-line checkout-divider checkout-divider--${styleType}`} />;
+          }
+          if (line.type === 'item') {
+            return (
+              <div key={i} className="checkout-line checkout-line--item">
+                <div className="checkout-item-main">
+                  <span className="checkout-item-index">[{line.index}]</span>
+                  <span className="checkout-item-title">{line.title}</span>
+                  <span className="checkout-item-qty">x{line.qty}</span>
+                </div>
+                <span className="checkout-item-price">${line.price}</span>
+              </div>
+            );
+          }
+          if (line.type === 'summary' || line.type === 'grand-total') {
+            return (
+              <div key={i} className={`checkout-line checkout-line--${line.type}`}>
+                <span className="checkout-summary-label">{line.label}</span>
+                <span className="checkout-summary-value">{line.value}</span>
+              </div>
+            );
+          }
+          return (
+            <p key={i} className={`checkout-line checkout-line--${line.type}`}>
+              {line.text}
+            </p>
+          );
+        })}
         {!isComplete && lines.length > 0 && (
           <p className="checkout-line">
-            &gt; <span className="cursor-blink">_</span>
+            <span className="cursor-blink">_</span>
           </p>
         )}
       </div>
