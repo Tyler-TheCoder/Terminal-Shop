@@ -3,6 +3,8 @@ import './CategoryFilter.css';
 const CATEGORIES = [
   { key: 'all', label: 'ALL' },
   { key: 'laptops', label: 'LAPTOPS' },
+  { key: 'smartphones', label: 'PHONES' },
+  { key: 'tablets', label: 'TABLETS' },
   { key: 'accessories', label: 'ACCESSORIES' },
 ];
 

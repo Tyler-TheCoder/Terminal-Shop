@@ -31,23 +31,29 @@ function App() {
         setLoading(true);
         setError(null);
 
-        const [laptopsRes, accessoriesRes] = await Promise.all([
-          fetch('https://dummyjson.com/products/category/laptops'),
-          fetch('https://dummyjson.com/products/category/mobile-accessories')
+        const [laptopsRes, accessoriesRes, smartphonesRes, tabletsRes] = await Promise.all([
+          fetch('https://dummyjson.com/products/category/laptops?limit=10'),
+          fetch('https://dummyjson.com/products/category/mobile-accessories?limit=10'),
+          fetch('https://dummyjson.com/products/category/smartphones?limit=10'),
+          fetch('https://dummyjson.com/products/category/tablets?limit=10')
         ]);
 
-        if (!laptopsRes.ok || !accessoriesRes.ok) {
+        if (!laptopsRes.ok || !accessoriesRes.ok || !smartphonesRes.ok || !tabletsRes.ok) {
           throw new Error('Failed to fetch product data');
         }
 
         const laptopsData = await laptopsRes.json();
         const accessoriesData = await accessoriesRes.json();
+        const smartphonesData = await smartphonesRes.json();
+        const tabletsData = await tabletsRes.json();
 
         // Extract products arrays and tag them
         const laptops = laptopsData.products.map(item => ({ ...item, category: 'laptops' }));
         const accessories = accessoriesData.products.map(item => ({ ...item, category: 'accessories' }));
+        const smartphones = smartphonesData.products.map(item => ({ ...item, category: 'smartphones' }));
+        const tablets = tabletsData.products.map(item => ({ ...item, category: 'tablets' }));
 
-        setProducts([...laptops, ...accessories]);
+        setProducts([...laptops, ...smartphones, ...tablets, ...accessories]);
       } catch (err) {
         setError(err.message);
       } finally {
